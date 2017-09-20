@@ -1,5 +1,5 @@
 Bootstrap: debootstrap
-MirrorURL: http://mirror.ufs.ac.za/ubuntu/ubuntu/
+MirrorURL: http://ftp.leg.uct.ac.za/ubuntu/
 OSVersion: xenial
 Include: software-properties-common
 
