@@ -1,7 +1,12 @@
 Bootstrap: debootstrap
-MirrorURL: http://archive.ubuntu.com/ubuntu/
+MirrorURL: http://mirror.ufs.ac.za/ubuntu/
 OSVersion: xenial
 Include: software-properties-common
+
+%environment
+	export SOFTWARE_PATH=/software
+	export PATH=$SOFTWARE_PATH/Montage/bin:$PATH
+
 %post
 	# Installation of the KERN2 packages
 	apt-get update -y 
@@ -19,17 +24,28 @@ Include: software-properties-common
 	apt-get install -y liblofar-pytools liblofarft liblofarstman libmessagebus libms libmslofar libparmdb libplc libpythondppp libspwcombine libstationresponse libtransport lofar-dev lofar-doc python-lofar stimela msutils simms casalite cub-dev python-transitions python3-transitions python-scatterbrane tmv-dev tmv0 galsim-dev galsim0 galsim python-galsim drive-casa sigpyproc tirific karma aips
 
 	# A corruption occurs with texlive and removing this file fixes the problem.
-        rm /var/lib/dpkg/info/texlive-fonts-recommended.list 
+	rm /var/lib/dpkg/info/texlive-fonts-recommended.list 
 
-	# Install pip and ipykernel for use with jupyter hub. 
-	apt-get install python-pip
-	pip install ipykernel 
+	# Install pip and ipykernel for use with JupyterHub
+	# (note that Python 2.7 requires IPython 5.x LTS edition)
+	apt-get -y install python-pip
+	pip install 'ipython>=5.0.0,<6.0.0' ipykernel 
 
-	# Additional packages installed via pip can be added here.
+	# Additional packages installed via pip can be added here
 	pip install atpy psutil
 
+	# Ensure /software is there to install unpackaged stuff
+	SOFTWARE_PATH=/software
+	mkdir -p $SOFTWARE_PATH
+
+	# Montage 5.x
+	cd $SOFTWARE_PATH
+	wget -O - http://montage.ipac.caltech.edu/download/Montage_v5.0.tar.gz | tar zx
+	cd Montage
+	make
+
 	# Create /users to bind home directories into the container.
-        mkdir -p /users /scratch /data
+	mkdir -p /users /scratch /data
 
 	# Cleanup 
 	apt-get clean
