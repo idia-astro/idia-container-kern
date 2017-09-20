@@ -1,5 +1,5 @@
 Bootstrap: debootstrap
-MirrorURL: http://mirror.ufs.ac.za/ubuntu/
+MirrorURL: http://mirror.ufs.ac.za/ubuntu/ubuntu/
 OSVersion: xenial
 Include: software-properties-common
 
