@@ -16,3 +16,5 @@ upgrade:
 	sudo singularity exec --writable ${IMAGE} apt-get update
 	sudo singularity exec --writable ${IMAGE} apt-get upgrade
 
+clean:
+	rm -f ${IMAGE}
